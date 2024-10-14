@@ -1,1 +1,5 @@
 # lcmFoam24
+
+The lcmFoam solver has the functionalities of the porousSimpleFoam and interFoam (MULES method for the VOF equation is only available in a separate sover; in the standard version the VOF equation is solved directly) solvers integrated into it and so is able to simulate incompressible, two-phase fluid flow through a porous medium under isothermal conditions. So, since lcmFoam incorporates the porosity of the medium, the momentum equation solved will contain an additional source term which is absent in the previous solvers.
+
+The way the lcmFoam solver simulates the flow process during liquid composite molding processes is that it considers the flow phenomenon to be a two-phase flow within a porous medium, which represents the fibre system. The two phases included are resin and air. When the resin is injected, the air is pushed out through the vents and the resin fills the space previously occupied by the air. Thus, the conservation of mass and momentum are solved along with the volume-of-fluid method based phase fraction equation
