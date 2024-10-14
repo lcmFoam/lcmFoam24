@@ -6,8 +6,9 @@ The way the lcmFoam solver simulates the flow process during liquid composite mo
 
 ## Installation (for Linux operating systems)
 
-- Install OpenFOAM. 
-- Create a folder (for example myOpenFOAM in your home directory) for your custom OpenFoam applications/solvers and cases. Copy the content from the lcmFoam24 repository there. 
+- Install OpenFOAM.
+- Download the zipped lcmFoam24 code.
+- Create a folder (for example myOpenFOAM in your home directory) for your custom OpenFoam applications/solvers and cases. Extract the zipped lcmFoam24 code there. 
 - Change directory to applications/solvers/lcmFoam24 and open a terminal there. Execute "wclean; wmake".
 - Change directory to cases/DM_analyticalFoam23_4cells and open a terminal there. Execute "lcmFoam24".
 
