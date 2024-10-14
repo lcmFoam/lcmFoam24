@@ -4,7 +4,7 @@ The lcmFoam solver has the functionalities of the porousSimpleFoam and interFoam
 
 The way the lcmFoam solver simulates the flow process during liquid composite molding processes is that it considers the flow phenomenon to be a two-phase flow within a porous medium, which represents the fibre system. The two phases included are resin and air. When the resin is injected, the air is pushed out through the vents and the resin fills the space previously occupied by the air. Thus, the conservation of mass and momentum are solved along with the volume-of-fluid method based phase fraction equation
 
-## Installation (for Linux operating systems)
+## Installation (for Ubuntu operating systems)
 
 - Install OpenFOAM, for example from https://develop.openfoam.com/Development/openfoam/-/wikis/precompiled/debian or https://openfoam.org/download/12-ubuntu/
 - Download the zipped lcmFoam24 code.
