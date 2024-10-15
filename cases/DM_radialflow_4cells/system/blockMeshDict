@@ -1,0 +1,321 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2112                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+scale   1e-3;
+
+// Geometric parameters
+resolution  1;
+
+center_x    0;
+center_y    0;  
+rInner      6.5;
+rOuter      10;
+xmax        197.5;
+ymax        152.5;
+
+zmin   -0.33;  // Back/front locations
+zmax    0.33;
+
+// Derived quantities
+rInner45    ${{ $rInner * sqrt(0.5) }};
+rOuter45    ${{ $rOuter * sqrt(0.5) }};
+
+
+// Divisions: Radial, quarter circumference, outer region and z-directions.
+nRadial  4;
+nQuarter 7;
+nxOuter  190;
+nyOuter  150;
+nz       2;
+
+
+/*codeInclude
+        #{
+            #include <cmath>  // Include the C++ header for mathematical operations
+        #};
+
+        code
+        #{
+            nRadial  ${{ ($rOuter - $ rInner) * $resolution}};
+            nQuarter ${{ ($rOuter45 + $center_x) * $resolution}};
+            nxOuter  ${{ ($xmax - $rOuter45 + $center_x) * $resolution }};
+            nyOuter   ${{ ($ymax - $rOuter45 + $center_y) * $resolution }};
+
+            nRadial  = std::round(nRadial);
+            nQuarter  = std::round(nQuarter);
+            nxOuter  = std::round(nxOuter);
+            nyOuter  = std::round(nyOuter);
+        #};
+
+nRadial     $nRadial;
+nQuarter    $nQuarter;
+nxOuter     $nxOuter;
+nyOuter     $nyOuter;
+nz          1;
+*/
+// ----------------
+
+vertices #codeStream
+{
+    codeInclude
+    #{
+        #include "pointField.H"
+    #};
+
+    code
+    #{
+        pointField points
+        ({  //upper half
+            /* 0*/ { $rInner + $center_x, $center_y, $zmin },                   /* 32 on other z side*/
+            /* 1*/ { $rOuter + $center_x, $center_y, $zmin },                   /* 33 on other z side*/
+            /* 2*/ { $xmax, $center_y, $zmin },                     /* 34 on other z side*/
+            /* 3*/ { $xmax, $rOuter45 + $center_y, $zmin },             /* 35 on other z side*/
+            /* 4*/ { $rOuter45 + $center_x, $rOuter45 + $center_y, $zmin },         /* 36 on other z side*/
+            /* 5*/ { $rInner45 + $center_x, $rInner45 + $center_y, $zmin },         /* 37 on other z side*/
+            /* 6*/ { $xmax, $ymax, $zmin },                 /* 38 on other z side*/
+            /* 7*/ { $rOuter45 + $center_x, $ymax, $zmin },             /* 39 on other z side*/
+            /* 8*/ { $center_x, $ymax, $zmin },                     /* 40 on other z side*/
+            /* 9*/ { $center_x, $rOuter + $center_y, $zmin },                   /* 41 on other z side*/
+            /*10*/ { $center_x, $rInner + $center_y, $zmin },                   /* 42 on other z side*/
+            /*11*/ { -$rInner + $center_x, $center_y, $zmin },                  /* 43 on other z side*/
+            /*12*/ { -$rOuter + $center_x, $center_y, $zmin },                  /* 44 on other z side*/
+            /*13*/ { -$xmax, $center_y, $zmin },                    /* 45 on other z side*/
+            /*14*/ { -$xmax, $rOuter45 + $center_y, $zmin },            /* 46 on other z side*/
+            /*15*/ { -$rOuter45 + $center_x, $rOuter45 + $center_y, $zmin },        /* 47 on other z side*/
+            /*16*/ { -$rInner45 + $center_x, $rInner45 + $center_y, $zmin },        /* 48 on other z side*/
+            /*17*/ { -$xmax, $ymax, $zmin },                /* 49 on other z side*/
+            /*18*/ { -$rOuter45 + $center_x, $ymax, $zmin },             /* 50 on other z side*/
+
+
+            //lower half
+            /*19 = 3*/ { $xmax, -$rOuter45 + $center_y, $zmin },         /* 51 on other z side*/
+            /*20 = 4*/ { $rOuter45 + $center_x, -$rOuter45 + $center_y, $zmin },     /* 52 on other z side*/
+            /*21 = 5*/ { $rInner45 + $center_x, -$rInner45 + $center_y, $zmin },     /* 53 on other z side*/
+            /*22 = 6*/ { $xmax, -$ymax, $zmin },             /* 54 on other z side*/
+            /*23 = 7*/ { $rOuter45 + $center_x, -$ymax, $zmin },         /* 55 on other z side*/
+            /*24 = 8*/ { $center_x, -$ymax, $zmin },                 /* 56 on other z side*/
+            /*25 = 9*/ { $center_x, -$rOuter + $center_y, $zmin },               /* 57 on other z side*/
+            /*26 =10*/ { $center_x, -$rInner + $center_y, $zmin },               /* 58 on other z side*/
+            /*27 = 14*/ { -$xmax, -$rOuter45 + $center_y, $zmin },       /* 59 on other z side*/
+            /*28 =15*/ { -$rOuter45 + $center_x, -$rOuter45 + $center_y, $zmin },    /* 60 on other z side*/
+            /*29 = 16*/ { -$rInner45 +  $center_x, -$rInner45 + $center_y, $zmin },   /* 61 on other z side*/
+            /*30 = 17*/ { -$xmax, -$ymax, $zmin },           /* 62 on other z side*/
+            /*31 = 18*/ { -$rOuter45 + $center_x, -$ymax, $zmin }        /* 63 on other z side*/     
+
+       
+        });
+
+        // Duplicate z points for zmax
+        const label sz = points.size();
+        points.resize(2*sz);
+        for (label i = 0; i < sz; ++i)
+        {
+            const point& pt = points[i];
+            points[i + sz] = point(pt.x(), pt.y(), $zmax);
+        }
+
+        os  << points;
+    #};
+};
+
+// Can remove unneeded variables
+#remove ( "r(Inner|Outer).*"  "[xy](min|max)" )
+
+blocks
+(   //upper half
+    hex (5 4 9 10 37 36 41 42)    ($nRadial  $nQuarter $nz) grading (1 1 0.157894736)
+    hex (0 1 4 5 32 33 36 37)     ($nRadial  $nQuarter $nz) grading (1 1 0.157894736)
+    hex (1 2 3 4 33 34 35 36)     ($nxOuter  $nQuarter $nz) grading (1 1 0.157894736)
+    hex (4 3 6 7 36 35 38 39)     ($nxOuter  $nyOuter  $nz) grading (1 1 0.157894736)
+    hex (9 4 7 8 41 36 39 40)     ($nQuarter $nyOuter  $nz) grading (1 1 0.157894736)
+    hex (15 16 10 9 47 48 42 41)  ($nRadial  $nQuarter $nz) grading (1 1 0.157894736)
+    hex (12 11 16 15 44 43 48 47) ($nRadial  $nQuarter $nz) grading (1 1 0.157894736)
+    hex (13 12 15 14 45 44 47 46) ($nxOuter  $nQuarter $nz) grading (1 1 0.157894736)
+    hex (14 15 18 17 46 47 50 49) ($nxOuter  $nyOuter  $nz) grading (1 1 0.157894736)
+    hex (15 9 8 18 47 41 40 50)   ($nQuarter $nyOuter  $nz) grading (1 1 0.157894736)
+
+
+    //lower half
+    //hex (21 20 25 26 53 52 57 58)    ($nRadial  $nQuarter $nz) grading (1 1 0.157894736)
+    hex (26 25 20 21 58 57 52 53)    ($nRadial  $nQuarter $nz) grading (1 1 0.157894736)
+    //hex (0 1 20 21 32 33 52 53)     ($nRadial  $nQuarter $nz) grading (1 1 0.157894736)
+    hex (21 20 1 0 53 52 33 32)     ($nRadial  $nQuarter $nz) grading (1 1 0.157894736)
+    //hex (1 2 19 20 33 34 51 52)     ($nxOuter  $nQuarter $nz) grading (1 1 0.157894736)
+    hex (20 19 2 1 52 51 34 33)     ($nxOuter  $nQuarter $nz) grading (1 1 0.157894736)
+    //hex (20 19 22 23 52 51 54 55)     ($nxOuter  $nyOuter  $nz) grading (1 1 0.157894736)
+    hex (23 22 19 20 55 54 51 52)     ($nxOuter  $nyOuter  $nz) grading (1 1 0.157894736)
+    //hex (25 20 23 24 57 52 55 56)     ($nQuarter $nyOuter  $nz) grading (1 1 0.157894736)
+    hex (24 23 20 25 56 55 52 57)     ($nQuarter $nyOuter  $nz) grading (1 1 0.157894736)
+    //hex (28 29 26 25 60 61 58 57)  ($nRadial  $nQuarter $nz) grading (1 1 0.157894736)
+    hex (25 26 29 28 57 58 61 60)  ($nRadial  $nQuarter $nz) grading (1 1 0.157894736)
+    //hex (12 11 29 28 44 43 61 60) ($nRadial  $nQuarter $nz) grading (1 1 0.157894736)
+    hex (28 29 11 12 60 61 43 44) ($nRadial  $nQuarter $nz) grading (1 1 0.157894736)
+    //hex (13 12 28 27 45 44 60 59) ($nxOuter  $nQuarter $nz) grading (1 1 0.157894736)
+    hex (27 28 12 13 59 60 44 45) ($nxOuter  $nQuarter $nz) grading (1 1 0.157894736)
+    //hex (27 28 31 30 59 60 63 62) ($nxOuter  $nyOuter  $nz) grading (1 1 0.157894736)
+    hex (30 31 28 27 62 63 60 59) ($nxOuter  $nyOuter  $nz) grading (1 1 0.157894736)
+    //hex (28 25 24 31 60 57 56 63)   ($nQuarter $nyOuter  $nz) grading (1 1 0.157894736)
+    hex (31 24 25 28 63 56 57 60)   ($nQuarter $nyOuter  $nz) grading (1 1 0.157894736)
+);
+
+edges
+(
+    // Inner cylinder upper half
+    arc  0  5 origin ($center_x $center_y $zmin)
+    arc  5 10 origin ($center_x $center_y $zmin)
+    arc  1  4 origin ($center_x $center_y $zmin)
+    arc  4  9 origin ($center_x $center_y $zmin)
+    arc 32 37 origin ($center_x $center_y $zmax)
+    arc 37 42 origin ($center_x $center_y $zmax)
+    arc 33 36 origin ($center_x $center_y $zmax)
+    arc 36 41 origin ($center_x $center_y $zmax)
+    // Intermediate cylinder upper half
+    arc 11 16 origin ($center_x $center_y $zmin)
+    arc 16 10 origin ($center_x $center_y $zmin)
+    arc 12 15 origin ($center_x $center_y $zmin)
+    arc 15  9 origin ($center_x $center_y $zmin)
+    arc 43 48 origin ($center_x $center_y $zmax)
+    arc 48 42 origin ($center_x $center_y $zmax)
+    arc 44 47 origin ($center_x $center_y $zmax)
+    arc 47 41 origin ($center_x $center_y $zmax)
+ 
+    // Inner cylinder lower half
+    arc  0  21 origin ($center_x $center_y $zmin)
+    arc  21 26 origin ($center_x $center_y $zmin)
+    arc  1  20 origin ($center_x $center_y $zmin)
+    arc  20  25 origin ($center_x $center_y $zmin)
+    arc 32 53 origin ($center_x $center_y $zmax)
+    arc 53 58 origin ($center_x $center_y $zmax)
+    arc 33 52 origin ($center_x $center_y $zmax)
+    arc 52 57 origin ($center_x $center_y $zmax)
+    // Intermediate cylinder lower half
+    arc 11 29 origin ($center_x $center_y $zmin)
+    arc 29 26 origin ($center_x $center_y $zmin)
+    arc 12 28 origin ($center_x $center_y $zmin)
+    arc 28 25 origin ($center_x $center_y $zmin)
+    arc 43 61 origin ($center_x $center_y $zmax)
+    arc 61 58 origin ($center_x $center_y $zmax)
+    arc 44 60 origin ($center_x $center_y $zmax)
+    arc 60 57 origin ($center_x $center_y $zmax)
+);
+
+boundary
+(
+
+    outlet
+    {
+        type patch;
+        faces
+        (
+            (2 3 35 34)
+            (3 6 38 35)
+            (2 19 51 34)
+            (19 22 54 51)
+            (14 13 45 46)
+            (17 14 46 49)
+            (27 13 45 59)
+            (30 27 59 62)
+            (7 8 40 39)
+            (6 7 39 38)
+            (8 18 50 40)
+            (18 17 49 50)
+            (23 24 56 55)
+            (22 23 55 54)
+            (24 31 63 56)
+            (31 30 62 63)
+        );
+    }
+
+    inlet
+    {
+        type patch;
+        faces
+        (
+            (10 5 37 42)
+            (5 0 32 37)
+            (16 10 42 48)
+            (11 16 48 43)
+            
+            (26 21 53 58)
+            (21 0 32 53)
+            (29 26 58 61)
+            (11 29 61 43)
+        );
+    }
+
+    freeSlip
+    {
+        type patch;
+        faces
+        (
+        // Upper half (zmin)
+        (5 4 9 10)
+        (0 1 4 5)
+        (1 2 3 4)
+        (4 3 6 7)
+        (9 4 7 8)
+        (16 10 9 15)
+        (12 11 16 15)
+        (13 12 15 14)
+        (14 15 18 17)
+        (15 9 8 18)
+
+        // Lower half (zmin)
+        (21 20 25 26)
+        (0 1 20 21)
+        (1 2 19 20)
+        (20 19 22 23)
+        (25 20 23 24)
+        (29 26 25 28)
+        (12 11 29 28)
+        (13 12 28 27)
+        (27 28 31 30)
+        (28 25 24 31)
+
+        // Upper half (zmax)
+        (37 36 41 42)
+        (32 33 36 37)
+        (33 34 35 36)
+        (36 35 38 39)
+        (41 36 39 40)
+        (48 42 41 47)
+        (44 43 48 47)
+        (45 44 47 46)
+        (46 47 50 49)
+        (47 41 40 50)
+
+        // Lower half ($zmax)
+        (53 52 57 58)
+        (32 33 52 53)
+        (33 34 51 52)
+        (52 51 54 55)
+        (57 52 55 56)
+        (61 58 57 60)
+        (44 43 61 60)
+        (45 44 60 59)
+        (59 60 63 62)
+        (60 57 56 63)
+        );
+    }
+
+);
+
+mergePatchPairs
+(
+);
+
+
+// ************************************************************************* //
