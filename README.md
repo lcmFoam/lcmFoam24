@@ -12,6 +12,6 @@ The way the lcmFoam solver simulates the flow process during liquid composite mo
 - Change directory to applications/solvers/lcmFoam24 and open a terminal there and execute "openfoam2406". Execute "wclean; wmake".
 - Change directory to cases/DM_radialflow_4cells and open a terminal there and execute "openfoam2406". Execute "lcmFoam24".
 
-## Comparison lcmFoam24 and lcmFoam24mules
+## Comparison lcmFoam24 without and with MULES solver for the vOF equation
 ![Comparison lcmFoam24 and lcmFoam24mules](comparison_lcmFoam24_lcmFoam24mules.png)
 
