@@ -1,3 +1,0 @@
-SOURCE += lcmFoam24mules.C
-
-EXE = $(FOAM_USER_APPBIN)/lcmFoam24mules
