@@ -16,7 +16,16 @@ if (correctPhi)
         dimensionedScalar("rAU", dimTime/dimDensity, 1)
     );
 
-    #include "correctPhi.H"
+	CorrectPhi
+	(
+		U,
+		phi,
+		p_rgh,
+		surfaceScalarField("rAUf", fvc::interpolate(rAU())),
+		geometricZeroField(),
+		pimple
+	);
+	#include "continuityErrs.H"	
 }
 else
 {

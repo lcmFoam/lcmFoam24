@@ -52,6 +52,7 @@ Description
 #include "IOporosityModelList.H"
 #include "fvOptions.H"
 #include "CorrectPhi.H"
+//#include "/lib/openfoam/openfoam2406/src/finiteVolume/cfdTools/general/CorrectPhi/CorrectPhi.H"
 #include "fvcSmooth.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -129,19 +130,33 @@ int main(int argc, char *argv[])
 
                     MRF.update();
 
+
+
                     if (correctPhi)
                     {
                         // Calculate absolute flux
                         // from the mapped surface velocity
                         phi = mesh.Sf() & Uf();
 
-                        #include "correctPhi.H"
+						CorrectPhi
+						(
+							U,
+							phi,
+							p_rgh,
+							surfaceScalarField("rAUf", fvc::interpolate(rAU())),
+							geometricZeroField(),
+							pimple
+						);
+						#include "continuityErrs.H"						
+						
+						
 
                         // Make the flux relative to the mesh motion
                         fvc::makeRelative(phi, U);
 
                         mixture.correct();
                     }
+
 
                     if (checkMeshCourantNo)
                     {
