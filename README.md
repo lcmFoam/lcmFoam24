@@ -7,10 +7,11 @@ The way the lcmFoam solver simulates the flow process during liquid composite mo
 ## Installation (for OpenFoam v2406 on Ubuntu operating systems)
 
 - Install OpenFOAM, for example from https://develop.openfoam.com/Development/openfoam/-/wikis/precompiled/debian 
-- Download the zipped lcmFoam24 code.
-- Create a folder (for example myOpenFOAM in your home directory) for your custom OpenFoam applications/solvers and cases. Extract the zipped lcmFoam24 code there. 
+- Download the zipped lcmFoam24 code and extract 
+- Change directory to folder lcmfoam24-main
 - Change directory to applications/solvers/lcmFoam24 and open a terminal there and execute "openfoam2406". Execute "wclean; wmake".
 - Change directory to cases/DM_radialflow_4cells and open a terminal there and execute "openfoam2406". Execute "lcmFoam24".
+- Execute "paraFoam".
 
 ## Comparison lcmFoam24 without and with MULES solver for the vOF equation
 ![Comparison lcmFoam24 and lcmFoam24mules](comparison_lcmFoam24_lcmFoam24mules.png)
