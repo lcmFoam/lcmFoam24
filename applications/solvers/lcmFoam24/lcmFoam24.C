@@ -165,13 +165,14 @@ int main(int argc, char *argv[])
                 }
             }
             
-/*            
+           
+		   
             //Solve advection equation with MULES for filling fraction alpha1
             #include "alphaControls.H"
             #include "alphaEqnSubCycle.H"
-*/            
-            
            
+            
+/*           
             //Solve advection equation for filling fraction alpha1
             solve
             (
@@ -189,6 +190,9 @@ int main(int argc, char *argv[])
             //Calculate the end-of-time-step mass flux
             //rhoPhi=0.*fvc::interpolate(rho)*phi;  //convective term ignored in momentum equation
             rhoPhi=1.*fvc::interpolate(rho)*phi; 
+*/			
+
+			
 
             mixture.correct();
 
