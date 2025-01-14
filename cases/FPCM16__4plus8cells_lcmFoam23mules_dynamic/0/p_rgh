@@ -1,0 +1,73 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      p_rgh;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [1 -1 -2 0 0 0 0];
+
+internalField   uniform 0;
+
+boundaryField
+{
+    outlet
+    {
+ 	type            totalPressure;
+        p0              uniform 0;    }
+
+    inlet
+    {
+        type            fixedValue;
+        value           uniform 91000;
+    }
+
+    slip
+    {
+        type            zeroGradient;
+        
+           
+
+    }
+    dynamic
+    {
+        //type            zeroGradient;
+        
+
+        type         codedMixed;
+        refValue        uniform 0.0e5;
+        refGradient uniform 0.0;
+        valueFraction uniform 1.0;        
+        name    myBC7;   
+        code
+        #{
+            const tmp<scalarField>& p=patch().lookupPatchField<volScalarField, scalar>("p").patchInternalField(); 
+            const tmp<scalarField>& alpha1=patch().lookupPatchField<volScalarField, scalar>("alpha.resin").patchInternalField();
+            const fvPatch& boundaryPatch = patch(); 
+            const vectorField& Cf = boundaryPatch.Cf(); 
+            scalarField& val=this->refValue();
+            scalarField& grad=this->refGrad();
+            scalarField& frac=this->valueFraction();
+            scalar fracVal=1.0;
+            forAll(Cf, faceI)
+            {
+                frac[faceI]=1.0-min(max(alpha1.ref()[faceI],0.0),1.0);  //linear transition
+            }
+        #};                
+     
+        
+        
+        
+    }
+}
+
+// ************************************************************************* //

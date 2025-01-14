@@ -1,0 +1,89 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2212                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    arch        "LSB;label=32;scalar=64";
+    class       volScalarField;
+    location    "0";
+    object      alpha.resin;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 0 0 0 0];
+
+internalField   uniform 0;
+
+boundaryField
+{
+    outlet
+    {
+        type            inletOutlet;
+        inletValue	    uniform 0;
+        value		    uniform 0;
+    }
+    inlet
+    {
+        type            fixedValue;
+        value           uniform 1;
+    }
+    slip
+    {
+        type            zeroGradient;
+    }
+    dynamic
+    {
+        type            zeroGradient;
+        
+    /*    
+        type         codedMixed;
+        refValue        uniform 0.0;
+        refGradient uniform 0.0;
+        valueFraction uniform 1.0;        
+        name    myBC7b;   
+        code
+        #{
+            const tmp<scalarField>& p=patch().lookupPatchField<volScalarField, scalar>("p_rgh").patchInternalField(); 
+            const tmp<scalarField>& alpha1=patch().lookupPatchField<volScalarField, scalar>("alpha.resin").patchInternalField();
+            const fvPatch& boundaryPatch = patch(); 
+            const vectorField& Cf = boundaryPatch.Cf(); 
+            scalarField& val=this->refValue();
+            scalarField& grad=this->refGrad();
+            scalarField& frac=this->valueFraction();
+            scalar fracVal=1.0;
+            forAll(Cf, faceI)
+            {
+                //fracVal=1.0-min(max(alpha1.ref()[faceI],0.0),1.0);
+                //if (fracVal >0.025)
+                //{
+                //    frac[faceI]=1.0;  //fixed value
+                //}
+                //else
+                //{
+                //    frac[faceI]=0.0;  //fixed gradient
+                //}
+                //
+                //frac[faceI]=1.0-min(max(alpha1.ref()[faceI],0.0),1.0);  //linear transition
+                //
+                //frac[faceI]=1.0;  //always fixed value
+                //val[faceI]=min(max(alpha1.ref()[faceI],0.0),1.0);
+                //val[faceI]=max(val[faceI],0.0);
+                //val[faceI]=min(val[faceI],1.0 );
+                frac[faceI]=0.0;  //always fixed gradient
+                grad[faceI]=-1e2;
+                
+            }
+        #}; 
+    */          
+        
+    }    
+}
+
+
+// ************************************************************************* //

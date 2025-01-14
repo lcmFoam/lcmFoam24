@@ -1,0 +1,42 @@
+/*---------------------------------------------------------------------------*\
+|       OpenFoam mesh file generated using HyperMesh Version: 2021.0.0.33     |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       polyBoundaryMesh;
+    location    "constant/polyMesh";
+    object      boundary;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+4
+(
+    inlet
+    {
+        type            patch;
+        nFaces          384;
+        startFace       268118;
+    }
+    outlet
+    {
+        type            patch;
+        nFaces          4200;
+        startFace       268502;
+    }
+    slip
+    {
+        type            wall;
+        nFaces          7726;
+        startFace       272702;
+    }
+    dynamic
+    {
+        type            wall;
+        nFaces          7726;
+        startFace       280428;
+    }
+)
+
+// ************************************************************************* //
