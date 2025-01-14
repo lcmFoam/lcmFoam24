@@ -1,1 +1,0 @@
-LIB = $(PWD)/../platforms/$(WM_OPTIONS)/lib/libmyBC7_3c41ac2f3273dca278f1096ca92a1b1e8e444411
