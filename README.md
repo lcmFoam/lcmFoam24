@@ -11,6 +11,7 @@ The way the lcmFoam solver simulates the flow process during liquid composite mo
 - Change directory to folder lcmfoam24-main
 - Change directory to applications/solvers/lcmFoam24 and open a terminal there and execute "openfoam2406". Execute "wclean; wmake".
 - Change directory to cases/DM_radialflow_4cells and open a terminal there and execute "openfoam2406". Execute "lcmFoam24".
+- If not pre-installed, install ParaView by executing "sudo apt update" and "sudo apt install paraview" in the terminal.
 - Execute "paraFoam".
 
 ## Comparison lcmFoam24 without and with MULES solver for the vOF equation
